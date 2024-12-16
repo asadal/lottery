@@ -101,7 +101,7 @@ def main():
                 st.session_state.original_filename = original_filename + ".csv"  # 기본 확장자 설정
 
     if st.session_state.data is not None:
-        st.success("데이터가 성공적으로 로드되었습니다!")
+        st.success("데이터가 성공적으로 로드됐습니다!")
         st.dataframe(st.session_state.data.head())  # 데이터의 처음 몇 행 표시
 
         # 당첨자 수 입력
