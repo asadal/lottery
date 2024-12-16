@@ -111,7 +111,7 @@ def main():
         # '기존 당첨자 제외' 옵션 추가
         exclude_previous = st.checkbox("기존 당첨자 제외")
 
-        if st.button("당첨자 추첨하기"):
+        if st.button("추첨하기"):
             # 데이터에서 기존 당첨자를 제외
             if exclude_previous and not st.session_state.previous_winners.empty:
                 remaining_data = st.session_state.data[~st.session_state.data.apply(tuple,1).isin(st.session_state.previous_winners.apply(tuple,1))]
@@ -144,7 +144,7 @@ def main():
                     to_buffer.seek(0)
                     download_filename = st.session_state.original_filename.rsplit('.', 1)[0] + "_result.xlsx"
                     st.download_button(
-                        label="당첨자 목록 다운로드 (Excel)",
+                        label="당첨자 목록 다운로드(Excel)",
                         data=to_buffer,
                         file_name=download_filename,
                         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -154,7 +154,7 @@ def main():
                     csv = st.session_state.winners.to_csv(index=False).encode('utf-8')
                     download_filename = st.session_state.original_filename.rsplit('.', 1)[0] + "_result.csv"
                     st.download_button(
-                        label="당첨자 목록 다운로드 (CSV)",
+                        label="당첨자 목록 다운로드(CSV)",
                         data=csv,
                         file_name=download_filename,
                         mime='text/csv'
