@@ -78,7 +78,7 @@ def main():
     initialize_session_state()
 
     # '초기화' 버튼 추가
-    if st.button("초기화"):
+    if st.button("Reload ⟳"):
         reset_session_state()
 
     # 데이터 소스 선택
