@@ -122,8 +122,9 @@ def main():
                     new_winners = remaining_data.sample(n=winner_num).reset_index(drop=True)
                     st.session_state.previous_winners = pd.concat([st.session_state.previous_winners, new_winners], ignore_index=True)
                     st.session_state.winners = new_winners
-                    st.success("당첨자가 선정되었습니다!")
-                    st.table(st.session_state.winners)
+                    st.success("당첨자가 선정됐습니다!")
+                    # st.table(st.session_state.winners)
+                    st.dataframe(st.session_state.winners)
             else:
                 # 기존 당첨자 제외 옵션이 비활성화되었거나 이전 당첨자가 없을 때
                 if winner_num > total_entries:
@@ -132,8 +133,9 @@ def main():
                     new_winners = st.session_state.data.sample(n=winner_num).reset_index(drop=True)
                     st.session_state.previous_winners = pd.concat([st.session_state.previous_winners, new_winners], ignore_index=True)
                     st.session_state.winners = new_winners
-                    st.success("당첨자가 선정되었습니다!")
-                    st.table(st.session_state.winners)
+                    st.success("당첨자가 선정됐습니다!")
+                    # st.table(st.session_state.winners)
+                    st.dataframe(st.session_state.winners)
 
             # 다운로드 준비
             if not st.session_state.winners.empty:
@@ -160,7 +162,7 @@ def main():
                         mime='text/csv'
                     )
     else:
-        st.info("데이터를 로드하려면 위의 옵션을 선택하고 파일을 업로드하거나 URL을 입력하세요.")
+        st.info("데이터를 로드하려면 파일을 업로드하거나 URL을 입력하세요.")
 
 if __name__ == "__main__":
     main()
