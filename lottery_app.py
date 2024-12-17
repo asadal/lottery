@@ -330,7 +330,7 @@ def main():
                 key="download_all_winners_csv"
             )
     else:
-        st.info("파일을 업로드하거나 공개된 구글 시트 URL을 입력하거나 직접 데이터를 입력하세요.")
+        st.info("파일을 업로드하거나, 공개된 구글 시트 URL을 입력하거나, 직접 데이터를 입력하세요.")
 
 if __name__ == "__main__":
     main()
