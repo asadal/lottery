@@ -211,7 +211,7 @@ def main():
                 else:
                     # 기존 당첨자 제외 옵션이 비활성화되었거나 이전 당첨자가 없을 때
                     if winner_num > total_entries:
-                        st.error("당첨자 수가 전체 참여자 수보다 많을 수 없습니다.")
+                        st.error("추첨자 수가 참가자 수보다 많습니다.")
                     else:
                         # 애니메이션 효과: 빠르게 랜덤 당첨자 목록을 변경하며 "롤링"하는 효과
                         animation_steps = 20  # 애니메이션 단계 수
