@@ -71,7 +71,7 @@ def reset_session_state():
     st.session_state.winners = pd.DataFrame()
     st.session_state.previous_winners = pd.DataFrame()
     st.session_state.current_round = 1
-    st.experimental_rerun()
+    st.rerun()
 
 def main():
     # 페이지 설정: 타이틀, 레이아웃, 파비콘 설정
