@@ -81,7 +81,7 @@ def main():
         layout="centered"
     )
 
-    st.title("랜덤 당첨자 추첨기")
+    st.title("랜덤 추첨기")
     
     # 대표 이미지 추가 (로컬 이미지 파일 또는 URL 사용 가능)
     # 로컬 이미지 파일을 사용할 경우, 이미지 파일을 프로젝트 폴더에 저장하고 파일명을 지정하세요.
@@ -156,7 +156,7 @@ def main():
                     sanitized_draw_name = sanitize_filename(draw)
                     download_filename_excel = f"{sanitized_draw_name}.xlsx"
                     st.download_button(
-                        label=f"'{draw}' 당첨자 다운로드 (Excel)",
+                        label=f"'{draw}' 당첨자 다운로드(Excel)",
                         data=excel_buffer,
                         file_name=download_filename_excel,
                         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -167,7 +167,7 @@ def main():
                     csv_data = round_winners.to_csv(index=False).encode('utf-8')
                     download_filename_csv = f"{sanitized_draw_name}.csv"
                     st.download_button(
-                        label=f"'{draw}' 당첨자 다운로드 (CSV)",
+                        label=f"'{draw}' 당첨자 다운로드(CSV)",
                         data=csv_data,
                         file_name=download_filename_csv,
                         mime='text/csv',
@@ -239,7 +239,7 @@ def main():
                 csv = st.session_state.winners.to_csv(index=False).encode('utf-8')
                 download_filename_csv = f"{sanitized_draw_name}.csv"
                 st.download_button(
-                    label="당첨자 목록 다운로드 (CSV)",
+                    label="당첨자 목록 다운로드(CSV)",
                     data=csv,
                     file_name=download_filename_csv,
                     mime='text/csv',
@@ -253,7 +253,7 @@ def main():
                 to_buffer.seek(0)
                 download_filename_excel = f"{sanitized_draw_name}.xlsx"
                 st.download_button(
-                    label="당첨자 목록 다운로드 (Excel)",
+                    label="당첨자 목록 다운로드(Excel)",
                     data=to_buffer,
                     file_name=download_filename_excel,
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -276,7 +276,7 @@ def main():
             to_buffer.seek(0)
             download_filename_excel = f"{sanitize_filename('전체 당첨자 목록')}.xlsx"
             st.download_button(
-                label="전체 당첨자 목록 다운로드 (Excel)",
+                label="전체 당첨자 목록 다운로드(Excel)",
                 data=to_buffer,
                 file_name=download_filename_excel,
                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -287,7 +287,7 @@ def main():
             csv_all = all_winners.to_csv(index=False).encode('utf-8')
             download_filename_csv = f"{sanitize_filename('당첨자 목록')}.csv"
             st.download_button(
-                label="전체 당첨자 목록 다운로드 (CSV)",
+                label="전체 당첨자 목록 다운로드(CSV)",
                 data=csv_all,
                 file_name=download_filename_csv,
                 mime='text/csv',
