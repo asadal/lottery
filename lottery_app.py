@@ -55,7 +55,7 @@ def load_google_sheet(url):
 
 def initialize_session_state():
     if 'data' not in st.session_state:
-        st.session_state.data = None
+        st.session_state.data = pd.DataFrame()
     if 'original_filename' not in st.session_state:
         st.session_state.original_filename = ""
     if 'winners' not in st.session_state:
@@ -66,12 +66,12 @@ def initialize_session_state():
         st.session_state.current_round = 1
 
 def reset_session_state():
-    st.session_state.data = None
+    st.session_state.data = pd.DataFrame()
     st.session_state.original_filename = ""
     st.session_state.winners = pd.DataFrame()
     st.session_state.previous_winners = pd.DataFrame()
     st.session_state.current_round = 1
-    st.rerun()
+    st.experimental_rerun()
 
 def main():
     # 페이지 설정: 타이틀, 레이아웃, 파비콘 설정
@@ -90,7 +90,7 @@ def main():
     st.image("https://cdn-icons-png.flaticon.com/512/6662/6662916.png", width=80)
     
     st.write("""
-        엑셀/CSV 파일을 업로드하거나 공개된 구글 시트 URL을 넣어주세요. 참가자 목록을 불러오고, 지정한 수만큼 랜덤으로 당첨자를 추첨해줍니다.
+        엑셀/CSV 파일을 업로드하거나 공개된 구글 시트 URL을 넣거나 직접 데이터를 입력하세요. 참가자 목록을 불러오고, 지정한 수만큼 랜덤으로 당첨자를 추첨해줍니다.
     """)
     initialize_session_state()
 
@@ -98,30 +98,66 @@ def main():
     if st.button("Reload ⟳"):
         reset_session_state()
 
+    st.markdown("---")  # 구분선 추가
+
     # 데이터 소스 선택
-    option = st.radio("데이터 소스 선택", ("엑셀/CSV 파일 업로드", "구글 시트 URL 입력"))
+    option = st.radio("데이터 소스 선택", ("엑셀/CSV 파일 업로드", "구글 시트 URL 입력", "직접 입력"))
 
     if option == "엑셀/CSV 파일 업로드":
-        uploaded_file = st.file_uploader("엑셀 파일(.xlsx) 또는 CSV 파일(.csv)을 업로드하세요", type=["xlsx", "csv"])
-        if uploaded_file is not None:
-            st.session_state.original_filename = uploaded_file.name
-            if uploaded_file.name.endswith('.xlsx'):
-                st.session_state.data = load_excel(uploaded_file)
+        uploaded_file = st.file_uploader("엑셀 파일(.xlsx) 또는 CSV 파일(.csv)을 업로드하세요", type=["xlsx", "csv"], key="file_uploader")
+        add_file = st.button("추가", key="add_file")
+        if add_file:
+            if uploaded_file is not None:
+                st.session_state.original_filename = uploaded_file.name
+                if uploaded_file.name.endswith('.xlsx'):
+                    df = load_excel(uploaded_file)
+                else:
+                    df = load_csv(uploaded_file)
+                if df is not None:
+                    st.session_state.data = df
+                    st.success("파일이 성공적으로 추가되었습니다!")
             else:
-                st.session_state.data = load_csv(uploaded_file)
-    else:
-        google_sheet_url = st.text_input("구글 시트 URL을 입력하세요")
-        if google_sheet_url:
-            data, original_filename = load_google_sheet(google_sheet_url)
-            if data is not None:
-                st.session_state.data = data
-                st.session_state.original_filename = original_filename + ".csv"  # 기본 확장자 설정
+                st.error("파일을 업로드해주세요.")
+
+    elif option == "구글 시트 URL 입력":
+        google_sheet_url = st.text_input("구글 시트 URL을 입력하세요", key="google_sheet_url")
+        add_google = st.button("추가", key="add_google")
+        if add_google:
+            if google_sheet_url.strip():
+                data, original_filename = load_google_sheet(google_sheet_url.strip())
+                if data is not None:
+                    st.session_state.data = data
+                    st.session_state.original_filename = original_filename + ".csv"  # 기본 확장자 설정
+                    st.success("구글 시트 데이터가 성공적으로 추가되었습니다!")
+            else:
+                st.error("구글 시트 URL을 입력해주세요.")
+
+    elif option == "직접 입력":
+        user_input = st.text_area("참가자 목록을 입력하세요 (각 참가자는 줄바꿈으로 구분)", height=200, key="direct_input")
+        add_direct = st.button("추가", key="add_direct")
+        if add_direct:
+            if user_input.strip():
+                # 줄바꿈을 기준으로 분리하여 리스트로 변환
+                entries = [line.strip() for line in user_input.strip().split('\n') if line.strip()]
+                if entries:
+                    # 데이터프레임으로 변환 (단일 열 "이름"으로 가정)
+                    df = pd.DataFrame(entries, columns=["이름"])
+                    st.session_state.data = df
+                    st.session_state.original_filename = "직접_입력_데이터.csv"  # 임의의 파일명 설정
+                    st.success("데이터 추가 완료!")
+                else:
+                    st.error("입력된 데이터가 유효하지 않습니다.")
+            else:
+                st.error("참가자 목록을 입력해주세요.")
 
     # 'previous_winners' 초기화 (data가 로드된 후에 설정)
-    if st.session_state.data is not None and st.session_state.previous_winners.empty:
-        st.session_state.previous_winners = pd.DataFrame(columns=['Draw Name'] + list(st.session_state.data.columns))
+    if not st.session_state.previous_winners.empty:
+        required_columns = ['Draw Name'] + list(st.session_state.data.columns)
+    elif not st.session_state.data.empty:
+        required_columns = ['Draw Name'] + list(st.session_state.data.columns)
+        st.session_state.previous_winners = pd.DataFrame(columns=required_columns)
 
-    if st.session_state.data is not None:
+    if not st.session_state.data.empty:
         st.success("데이터가 성공적으로 로드됐습니다!")
         st.dataframe(st.session_state.data.head())  # 데이터의 처음 몇 행 표시
 
@@ -130,7 +166,7 @@ def main():
         winner_num = st.number_input("당첨자 수를 입력하세요", min_value=1, max_value=total_entries, value=1, step=1)
 
         # '기존 당첨자 제외' 옵션 추가 (조건부 표시)
-        exclude_previous = None  # 초기화
+        exclude_previous = False  # 초기화
         if not st.session_state.previous_winners.empty:
             exclude_previous = st.checkbox("기존 당첨자 제외")
 
@@ -294,7 +330,7 @@ def main():
                 key="download_all_winners_csv"
             )
     else:
-        st.info("파일을 업로드하거나 공개된 구글 시트 URL을 입력하세요.")
+        st.info("파일을 업로드하거나 공개된 구글 시트 URL을 입력하거나 직접 데이터를 입력하세요.")
 
 if __name__ == "__main__":
     main()
