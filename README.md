@@ -1,7 +1,7 @@
 # 랜덤 추첨기
 엑셀/CSV 파일을 업로드하거나 공개된 구글 시트 URL을 넣으면, 참가자 목록을 불러오고 지정된 수만큼 랜덤으로 당첨자를 추첨해줍니다.
 
-<img src="https://static-00.iconduck.com/assets.00/perspective-dice-random-icon-938x1024-5fvwa6zh.png](https://cdn-icons-png.flaticon.com/512/7118/7118353.png" width="100">
+<img src="https://cdn-icons-png.flaticon.com/512/7118/7118353.png" width="100">
 
 - 기존 당첨자 목록 보기 및 다운로드(xlsx/csv)
 - 추첨 시 기존 당첨자 제외 기능
