@@ -87,7 +87,7 @@ def main():
     # 로컬 이미지 파일을 사용할 경우, 이미지 파일을 프로젝트 폴더에 저장하고 파일명을 지정하세요.
     # 예: st.image("banner.png", use_column_width=True)
     # 온라인 이미지를 사용할 경우, 이미지 URL을 사용하세요.
-    st.image("https://static-00.iconduck.com/assets.00/perspective-dice-random-icon-938x1024-5fvwa6zh.png", width=50)
+    st.image("https://cdn-icons-png.flaticon.com/512/6662/6662916.png", width=50)
     
     st.write("""
         엑셀/CSV 파일을 업로드하거나 공개된 구글 시트 URL을 넣어주세요. 참가자 목록을 불러오고, 지정한 수만큼 랜덤으로 당첨자를 추첨해줍니다.
