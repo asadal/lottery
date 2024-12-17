@@ -76,7 +76,7 @@ def reset_session_state():
 def main():
     # 페이지 설정: 타이틀, 레이아웃, 파비콘 설정
     st.set_page_config(
-        page_title="랜덤 당첨자 추첨기",
+        page_title="랜덤 추첨기",
         page_icon="🎉",  # 또는 파비콘 이미지 파일 경로 (예: "favicon.ico")
         layout="centered"
     )
@@ -115,7 +115,7 @@ def main():
                     df = load_csv(uploaded_file)
                 if df is not None:
                     st.session_state.data = df
-                    st.success("파일이 성공적으로 추가되었습니다!")
+                    st.success("파일 추가 완료!")
             else:
                 st.error("파일을 업로드해주세요.")
 
@@ -128,12 +128,12 @@ def main():
                 if data is not None:
                     st.session_state.data = data
                     st.session_state.original_filename = original_filename + ".csv"  # 기본 확장자 설정
-                    st.success("구글 시트 데이터가 성공적으로 추가되었습니다!")
+                    st.success("구글 시트 데이터 추가 완료!")
             else:
                 st.error("구글 시트 URL을 입력해주세요.")
 
     elif option == "직접 입력":
-        user_input = st.text_area("참가자 목록을 입력하세요 (각 참가자는 줄바꿈으로 구분)", height=200, key="direct_input")
+        user_input = st.text_area("참가자 목록을 입력하세요.(각 참가자는 줄바꿈으로 구분)", height=200, key="direct_input")
         add_direct = st.button("추가", key="add_direct")
         if add_direct:
             if user_input.strip():
@@ -158,7 +158,7 @@ def main():
         st.session_state.previous_winners = pd.DataFrame(columns=required_columns)
 
     if not st.session_state.data.empty:
-        st.success("데이터가 성공적으로 로드됐습니다!")
+        st.success("데이터가 성공적으로 로드됐습니다!(데이터 일부만 노출됩니다.)")
         st.dataframe(st.session_state.data.head())  # 데이터의 처음 몇 행 표시
 
         # 당첨자 수 입력
